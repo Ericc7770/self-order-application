@@ -5,16 +5,14 @@ DROP TABLE IF EXISTS employee;
 CREATE TABLE employee (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    accountId VARCHAR(40) NOT NULL,
+    user_name VARCHAR(40) NOT NULL,
     password VARCHAR(60) NOT NULL,
     status INT DEFAULT 1,
     create_time DATETIME DEFAULT NULL,
     update_time DATETIME DEFAULT NULL,
-    create_employee INT DEFAULT NULL,
-    update_employee INT DEFAULT NULL,
     PRIMARY KEY(id)
 );
-INSERT INTO employee VALUES (1,'root','root','123456',1,'2025-02-17','2025-02-27',1,1);
+INSERT INTO employee VALUES (1,'root','root','123456',1,'2025-02-17','2025-02-27');
 
 DROP TABLE IF EXISTS category;
 CREATE TABLE category (
@@ -77,3 +75,4 @@ CREATE TABLE order_details (
     FOREIGN KEY (item_id) REFERENCES item (id),
     FOREIGN KEY (order_id) REFERENCES orders (id)
 );
+

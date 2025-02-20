@@ -10,7 +10,7 @@ mvnw.cmd
 /.idea
 /.vscode
 /target
-
+*dev.properties
 
 
 # Mobile Tools for Java (J2ME)
