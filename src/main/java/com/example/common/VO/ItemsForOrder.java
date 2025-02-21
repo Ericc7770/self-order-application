@@ -1,6 +1,6 @@
 package com.example.common.VO;
 
-import com.example.common.entity.item;
+import com.example.common.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +16,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ItemsForOrder implements Serializable {
     private Integer tableNumber;
-    private List<item> items;
+    private List<Item> Items;
 }

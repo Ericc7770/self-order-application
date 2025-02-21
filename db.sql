@@ -65,6 +65,7 @@ CREATE TABLE order_details (
     id INT NOT NULL AUTO_INCREMENT,
     order_id INT NOT NULL,
     item_id INT NOT NULL,
+    item_name VARCHAR(50) NOT NULL,
     quantity INT NOT NULL,
     price decimal(10,2) NOT NULL,
     remark VARCHAR(255) DEFAULT NULL,

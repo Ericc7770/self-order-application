@@ -1,5 +1,6 @@
 package com.example.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,8 @@ public class Orders implements Serializable {
     private Double totalAmount;
     private Integer paymentStatus;
     private Integer paymentMethod;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updateTime;
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -49,7 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employee != null){
             throw new AccountExistedException(MessageConstant.ACCOUNT_EXIST);
         }
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         Employee newEmployee = Employee.builder()
                 .name(addEmployeeDTO.getName())
                 .userName(userName)
