@@ -14,4 +14,7 @@ public interface ItemMapper {
     @Select("SELECT * FROM item WHERE id = #{itemId}")
     Item getItemById(Integer itemId);
 
+    void addItem(Item item);
+
+    void updateItem(Item item);
 }
