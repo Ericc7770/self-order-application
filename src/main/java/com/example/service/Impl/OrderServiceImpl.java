@@ -3,6 +3,8 @@ package com.example.service.Impl;
 import com.example.common.DTO.ChangeOrderDTO;
 import com.example.common.DTO.OrderItemDetail;
 import com.example.common.DTO.PlaceOrderDTO;
+import com.example.common.DTO.UpdateItemForKitchenDTO;
+import com.example.common.VO.ItemForKitchenVO;
 import com.example.common.constant.OperationConstant;
 import com.example.common.entity.Item;
 import com.example.common.entity.OrderDetail;
@@ -35,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public void createNewOrder(PlaceOrderDTO placeOrderDTO) {
+    public List<ItemForKitchenVO> createNewOrder(PlaceOrderDTO placeOrderDTO) {
         List<OrderItemDetail> items = placeOrderDTO.getOrderDetails();
         Integer tableNumber = placeOrderDTO.getTableNumber();
         List<OrderDetail> orderDetails = new ArrayList<>();
@@ -67,10 +69,22 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         orderMapper.createOrder(order);
         Integer orderId = order.getId();
+        List<ItemForKitchenVO> itemForKitchenVOList = new ArrayList<>();
         for (OrderDetail orderDetail : orderDetails) {
             orderDetail.setOrderId(orderId);
             orderMapper.createOrderDetail(orderDetail);
+            ItemForKitchenVO item = ItemForKitchenVO.builder()
+                    .id(orderDetail.getId())
+                    .name(orderDetail.getItemName())
+                    .tableNumber(tableNumber)
+                    .status(OrderDetail.CREATED)
+                    .remark(orderDetail.getRemark())
+                    .orderId(orderId)
+                    .quantity(orderDetail.getQuantity())
+                    .build();
+            itemForKitchenVOList.add(item);
         }
+        return itemForKitchenVOList;
     }
 
     @Override
@@ -120,5 +134,17 @@ public class OrderServiceImpl implements OrderService {
                     .build();
             orderMapper.updateOrderDetails(detail);
         }
+    }
+
+    @Override
+    public void changeDishStatus(UpdateItemForKitchenDTO updateItemForKitchenDTO) {
+        String newStatus = updateItemForKitchenDTO.getNewStatus();
+        if (!newStatus.equals("fulfill") && !newStatus.equals("cancel")){
+            throw new InvalidOperationException("Invalid new status");
+        }
+        OrderDetail detail = OrderDetail.builder()
+                .id(updateItemForKitchenDTO.getOrderDetailId())
+                .status(newStatus.equals("fulfill") ? OrderDetail.FULFILLED : OrderDetail.CANCELLED).build();
+        orderMapper.changeDishStatus(detail);
     }
 }

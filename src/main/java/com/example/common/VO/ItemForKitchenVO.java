@@ -1,20 +1,22 @@
 package com.example.common.VO;
 
-import com.example.common.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
-
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemsForOrder implements Serializable {
+public class ItemForKitchenVO implements Serializable {
+    private Integer id;
     private Integer tableNumber;
-    private List<Item> Items;
+    private Integer orderId;
+    private String name;
+    private Integer quantity;
+    private Integer status;
+    private String remark;
 }

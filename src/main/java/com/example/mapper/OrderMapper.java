@@ -4,6 +4,7 @@ import com.example.common.entity.OrderDetail;
 import com.example.common.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -25,4 +26,6 @@ public interface OrderMapper {
     void updateOrder(Orders orders);
 
     void updateOrderDetails(OrderDetail detail);
+    @Update("UPDATE order_details SET status = #{status} WHERE id = #{id}")
+    void changeDishStatus(OrderDetail detail);
 }

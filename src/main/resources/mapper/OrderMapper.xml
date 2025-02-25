@@ -7,7 +7,7 @@
             VALUES (#{tableNumber}, #{status}, #{totalAmount}, #{paymentStatus}, #{createTime}, #{updateTime})
     </insert>
 
-    <insert id="createOrderDetail">
+    <insert id="createOrderDetail" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO order_details (order_id, item_id, item_name, quantity, price, remark, create_time, update_time)
         VALUES (#{orderId}, #{itemId}, #{itemName}, #{quantity}, #{price}, #{remark}, #{createTime}, #{updateTime})
     </insert>

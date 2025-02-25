@@ -2,7 +2,8 @@ package com.example.controller;
 
 import com.example.common.DTO.OrderItemDetail;
 import com.example.common.DTO.PlaceOrderDTO;
-import com.example.common.VO.ItemsForOrder;
+import com.example.common.VO.ItemForKitchenVO;
+import com.example.common.VO.ItemsForOrderVO;
 import com.example.common.constant.GeneralConstant;
 import com.example.common.constant.MessageConstant;
 import com.example.common.entity.Item;
@@ -11,6 +12,7 @@ import com.example.common.exception.InvalidTableNumberException;
 import com.example.common.result.Result;
 import com.example.service.ItemService;
 import com.example.service.OrderService;
+import com.example.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,26 +26,25 @@ import java.util.List;
 public class OrderController {
     private final ItemService itemService;
     private final OrderService orderService;
-    private final RedisTemplate redisTemplate;
+    private final WebSocketServer webSocketServer;
 
-    public OrderController(OrderService orderService, ItemService itemService, RedisTemplate redisTemplate) {
-
+    public OrderController(OrderService orderService, ItemService itemService, WebSocketServer webSocketServer) {
         this.orderService = orderService;
         this.itemService = itemService;
-        this.redisTemplate = redisTemplate;
+        this.webSocketServer = webSocketServer;
     }
 
     @GetMapping("/{tableNumber}")
     @Cacheable(cacheNames = "items")
-    public Result<ItemsForOrder> getItems(@PathVariable Integer tableNumber){
+    public Result<ItemsForOrderVO> getItems(@PathVariable Integer tableNumber){
         List<Item> items = itemService.getItems();
-        ItemsForOrder itemsForOrder =
-                ItemsForOrder
+        ItemsForOrderVO itemsForOrderVO =
+                ItemsForOrderVO
                 .builder()
                 .tableNumber(tableNumber)
                 .Items(items)
                 .build();
-        return Result.success(itemsForOrder);
+        return Result.success(itemsForOrderVO);
     }
 
     @PostMapping("/place")
@@ -56,7 +57,8 @@ public class OrderController {
         if (tableNumber < 1 || tableNumber > GeneralConstant.TABLE_COUNT){
             throw new InvalidTableNumberException(MessageConstant.INVALID_TABLE_NUMBER);
         }
-        orderService.createNewOrder(placeOrderDTO);
+        List<ItemForKitchenVO> itemForKitchenVOS = orderService.createNewOrder(placeOrderDTO);
+        webSocketServer.sendToAllClients(itemForKitchenVOS);
         return Result.success();
     }
 }

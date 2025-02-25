@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.DTO.ChangeOrderDTO;
+import com.example.common.DTO.UpdateItemForKitchenDTO;
 import com.example.common.entity.OrderDetail;
 import com.example.common.entity.Orders;
 import com.example.common.result.Result;
@@ -41,6 +42,11 @@ public class OrderManagementController {
     @PostMapping("/orders/manage")
     public Result changeOrderStatus(@RequestBody ChangeOrderDTO changeOrderDTO){
         orderService.changeStatus(changeOrderDTO);
+        return Result.success();
+    }
+    @PostMapping("/orders/manageDish")
+    public Result changeDishStatus(@RequestBody UpdateItemForKitchenDTO updateItemForKitchenDTO){
+        orderService.changeDishStatus(updateItemForKitchenDTO);
         return Result.success();
     }
 }
