@@ -12,6 +12,8 @@ import com.example.common.result.Result;
 import com.example.service.ItemService;
 import com.example.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,21 +24,24 @@ import java.util.List;
 public class OrderController {
     private final ItemService itemService;
     private final OrderService orderService;
+    private final RedisTemplate redisTemplate;
 
-    public OrderController(OrderService orderService, ItemService itemService) {
+    public OrderController(OrderService orderService, ItemService itemService, RedisTemplate redisTemplate) {
 
         this.orderService = orderService;
         this.itemService = itemService;
+        this.redisTemplate = redisTemplate;
     }
 
     @GetMapping("/{tableNumber}")
+    @Cacheable(cacheNames = "items")
     public Result<ItemsForOrder> getItems(@PathVariable Integer tableNumber){
-        List<Item> Items = itemService.getItems();
+        List<Item> items = itemService.getItems();
         ItemsForOrder itemsForOrder =
                 ItemsForOrder
                 .builder()
                 .tableNumber(tableNumber)
-                .Items(Items)
+                .Items(items)
                 .build();
         return Result.success(itemsForOrder);
     }
