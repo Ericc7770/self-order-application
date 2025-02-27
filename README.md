@@ -1,4 +1,4 @@
-Restaurant self-order application
+# Restaurant self-order application
 
 This is a RESTful web server for restaurant self-order application.  
 •	Tech Stack: Java, SpringBoot, MyBatis, Redis, MySQL, WebSocket, Spring MVC, JWT Authentication.  
